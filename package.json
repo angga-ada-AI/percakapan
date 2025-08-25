@@ -1,0 +1,64 @@
+{
+  "name": "percakapan",
+  "version": "1.0.0",
+  "description": "AI Automation with n8n and Open Source AI - Social Media and Marketing Automation",
+  "main": "examples/basic-setup.js",
+  "scripts": {
+    "test": "node examples/basic-setup.js",
+    "validate": "node scripts/validate-workflows.js",
+    "docs": "node scripts/generate-docs.js",
+    "lint": "eslint examples/",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "ai-automation",
+    "n8n-workflows",
+    "social-media-automation",
+    "marketing-automation",
+    "open-source-ai",
+    "workflow-automation",
+    "api-integration",
+    "multi-tenant",
+    "saas-automation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/percakapan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/percakapan/issues"
+  },
+  "homepage": "https://github.com/yourusername/percakapan#readme",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "ajv": "^8.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "files": [
+    "docs/",
+    "examples/",
+    "templates/",
+    "README.md"
+  ],
+  "topics": [
+    "ai-automation",
+    "n8n-workflows",
+    "social-media-automation",
+    "marketing-automation",
+    "open-source-ai",
+    "workflow-automation",
+    "api-integration",
+    "multi-tenant",
+    "saas-automation"
+  ]
+}

@@ -1,0 +1,70 @@
+name: Validate n8n Workflows
+
+on:
+  push:
+    paths:
+      - 'docs/n8n-workflows/**'
+      - '.github/workflows/validate-workflows.yml'
+  pull_request:
+    paths:
+      - 'docs/n8n-workflows/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g n8n
+        npm install ajv
+        
+    - name: Validate JSON workflows
+      run: |
+        echo "Validating n8n workflow files..."
+        for file in docs/n8n-workflows/*.json; do
+          if [ -f "$file" ]; then
+            echo "Checking $file"
+            node -e "
+              const fs = require('fs');
+              const Ajv = require('ajv');
+              const ajv = new Ajv();
+              
+              try {
+                const workflow = JSON.parse(fs.readFileSync('$file', 'utf8'));
+                
+                // Basic validation
+                if (!workflow.nodes || !Array.isArray(workflow.nodes)) {
+                  throw new Error('Invalid workflow structure: missing nodes array');
+                }
+                
+                if (!workflow.connections) {
+                  throw new Error('Invalid workflow structure: missing connections');
+                }
+                
+                console.log('✅ $file is valid');
+              } catch (error) {
+                console.error('❌ $file validation failed:', error.message);
+                process.exit(1);
+              }
+            "
+          fi
+        done
+        
+    - name: Check workflow syntax
+      run: |
+        echo "Checking workflow syntax..."
+        for file in docs/n8n-workflows/*.json; do
+          if [ -f "$file" ]; then
+            echo "Validating syntax for $file"
+            n8n validate-workflow --input "$file" || exit 1
+          fi
+        done

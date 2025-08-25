@@ -1,0 +1,97 @@
+{
+  "name": "Instagram AI Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "instagram-ai-post",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.wan.ai/v1/generate",
+        "authentication": "none",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "prompt",
+              "value": "{{$json[\"prompt\"]}}"
+            },
+            {
+              "name": "model",
+              "value": "wan-2.2"
+            }
+          ]
+        }
+      },
+      "id": "wan-ai-generate",
+      "name": "WAN AI Generate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v19.0/me/media",
+        "authentication": "none",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "caption",
+              "value": "{{$json[\"caption\"]}}"
+            },
+            {
+              "name": "access_token",
+              "value": "{{$json[\"ig_token\"]}}"
+            },
+            {
+              "name": "image_url",
+              "value": "{{$json[\"generated_image_url\"]}}"
+            }
+          ]
+        }
+      },
+      "id": "instagram-upload",
+      "name": "Instagram Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "WAN AI Generate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WAN AI Generate": {
+      "main": [
+        [
+          {
+            "node": "Instagram Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1"
+}
